@@ -1,5 +1,8 @@
-import 'package:bloc_test/data/youtube_api.dart';
+import 'package:bloc_test/provider/trending_model.dart';
+import 'package:bloc_test/ui/detail_video.dart';
+import 'package:bloc_test/ui/trending_video_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,64 +13,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  final api = YoutubeClient();
-
-  Future<void> _incrementCounter() async {
-    final result = await api.getTrendingVideos();
-
-    debugPrint("${result.length}");
-    debugPrint("${result[0].videoInfo.title.text}");
-
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return ChangeNotifierProvider(
+      create: (ctx) => TrendingModel(),
+      child: Consumer<TrendingModel>(
+        builder: (ctx, model, _) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+            initialRoute: '/',
+            routes: {
+              '/': (ctx) => const TrendingVideoScreen(),
+              '/detail': (ctx) => DetailVideoScreen(video: model.detailVideo)
+            },
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -18,7 +18,7 @@ class VideoInfo {
 class Thumbnail {
   late final String url;
 
-  Thumbnail.fromJson(Map json) : url = json["thumbnails"][2]["url"];
+  Thumbnail.fromJson(Map json) : url = json["thumbnails"][0]["url"];
 }
 
 class Title {
