@@ -69,8 +69,9 @@ class VideoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.read<TrendingModel>(); //    <-- Provider.of
 
-    return GestureDetector(
-      onTap: () => {
+    return TextButton(
+      style: TextButton.styleFrom(primary: Colors.black),
+      onPressed: () => {
         model.onItemClicked(video),
         Navigator.pushNamed(context, '/detail')
       },
